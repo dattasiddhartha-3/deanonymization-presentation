@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+    stroke: #aaa;
+    stroke-width: 2px;
+}
+
+.link {
+    stroke: #aaa;
+    stroke-width: 0.1px;
+}
+
+</style>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+<body>
+
+
+<script>
+var width = 900,
+    height = 590;
+    
+var svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .call(d3.behavior.zoom().scaleExtent([0.1,5]).on("zoom", redraw)).on("dblclick.zoom", null)
+        .append('g');
+
+//INPUT DATA
+var links = [
+{source: 'Yue Fang', target: 'Lilla Gabrieli'},
+{source: 'Yue Fang', target: 'Clare Brennan'},
+{source: 'Yue Fang', target: 'Lai Wing'},
+{source: 'Yue Fang', target: 'anon_4'},
+{source: 'Yue Fang', target: 'anon_2'},
+{source: 'Yue Fang', target: 'Bernardo Russo'},
+{source: 'Yue Fang', target: 'anon_5'},
+{source: 'Yue Fang', target: 'Kristen McCollum'},
+{source: 'Yue Fang', target: 'Lizaveta Charnenka'},
+{source: 'Yue Fang', target: 'Yining Xu'},
+{source: 'Yue Fang', target: 'anon_6'},
+{source: 'Yue Fang', target: 'anon_7'},
+{source: 'Yue Fang', target: 'Alexandra Rottenkolber'},
+{source: 'Yue Fang', target: 'Dagmar Nared'},
+{source: 'Yue Fang', target: 'anon_3'},
+{source: 'Yue Fang', target: 'Antonella Perini'},
+{source: 'Yue Fang', target: 'Jack Miller'},
+{source: 'Yue Fang', target: 'anon_1'},
+{source: 'Yue Fang', target: 'Maria-Diana Banias'},
+{source: 'Yue Fang', target: 'Yue Yang'},
+{source: 'Yue Fang', target: 'anon_0'},
+{source: 'Yue Fang', target: 'Maxine Setiawan'},
+{source: 'Yue Fang', target: 'Kassie Scott'},
+{source: 'Lilla Gabrieli', target: 'Yue Fang'},
+{source: 'Lilla Gabrieli', target: 'Clare Brennan'},
+{source: 'Lilla Gabrieli', target: 'Lai Wing'},
+{source: 'Lilla Gabrieli', target: 'anon_4'},
+{source: 'Lilla Gabrieli', target: 'anon_2'},
+{source: 'Lilla Gabrieli', target: 'Bernardo Russo'},
+{source: 'Lilla Gabrieli', target: 'anon_5'},
+{source: 'Lilla Gabrieli', target: 'Kristen McCollum'},
+{source: 'Lilla Gabrieli', target: 'Lizaveta Charnenka'},
+{source: 'Lilla Gabrieli', target: 'Yining Xu'},
+{source: 'Lilla Gabrieli', target: 'anon_6'},
+{source: 'Lilla Gabrieli', target: 'anon_7'},
+{source: 'Lilla Gabrieli', target: 'Alexandra Rottenkolber'},
+{source: 'Lilla Gabrieli', target: 'Dagmar Nared'},
+{source: 'Lilla Gabrieli', target: 'anon_3'},
+{source: 'Lilla Gabrieli', target: 'Antonella Perini'},
+{source: 'Lilla Gabrieli', target: 'Jack Miller'},
+{source: 'Lilla Gabrieli', target: 'anon_1'},
+{source: 'Lilla Gabrieli', target: 'Maria-Diana Banias'},
+{source: 'Lilla Gabrieli', target: 'Yue Yang'},
+{source: 'Lilla Gabrieli', target: 'anon_0'},
+{source: 'Lilla Gabrieli', target: 'Maxine Setiawan'},
+{source: 'Lilla Gabrieli', target: 'Kassie Scott'},
+{source: 'Clare Brennan', target: 'Yue Fang'},
+{source: 'Clare Brennan', target: 'Lilla Gabrieli'},
+{source: 'Clare Brennan', target: 'Lai Wing'},
+{source: 'Clare Brennan', target: 'anon_4'},
+{source: 'Clare Brennan', target: 'anon_2'},
+{source: 'Clare Brennan', target: 'Bernardo Russo'},
+{source: 'Clare Brennan', target: 'anon_5'},
+{source: 'Clare Brennan', target: 'Kristen McCollum'},
+{source: 'Clare Brennan', target: 'Lizaveta Charnenka'},
+{source: 'Clare Brennan', target: 'Yining Xu'},
+{source: 'Clare Brennan', target: 'anon_6'},
+{source: 'Clare Brennan', target: 'anon_7'},
+{source: 'Clare Brennan', target: 'Alexandra Rottenkolber'},
+{source: 'Clare Brennan', target: 'Dagmar Nared'},
+{source: 'Clare Brennan', target: 'anon_3'},
+{source: 'Clare Brennan', target: 'Antonella Perini'},
+{source: 'Clare Brennan', target: 'Jack Miller'},
+{source: 'Clare Brennan', target: 'anon_1'},
+{source: 'Clare Brennan', target: 'Maria-Diana Banias'},
+{source: 'Clare Brennan', target: 'Yue Yang'},
+{source: 'Clare Brennan', target: 'anon_0'},
+{source: 'Clare Brennan', target: 'Maxine Setiawan'},
+{source: 'Clare Brennan', target: 'Kassie Scott'},
+{source: 'Lai Wing', target: 'Yue Fang'},
+{source: 'Lai Wing', target: 'Lilla Gabrieli'},
+{source: 'Lai Wing', target: 'Clare Brennan'},
+{source: 'Lai Wing', target: 'anon_4'},
+{source: 'Lai Wing', target: 'anon_2'},
+{source: 'Lai Wing', target: 'Bernardo Russo'},
+{source: 'Lai Wing', target: 'anon_5'},
+{source: 'Lai Wing', target: 'Kristen McCollum'},
+{source: 'Lai Wing', target: 'Lizaveta Charnenka'},
+{source: 'Lai Wing', target: 'Yining Xu'},
+{source: 'Lai Wing', target: 'anon_6'},
+{source: 'Lai Wing', target: 'anon_7'},
+{source: 'Lai Wing', target: 'Alexandra Rottenkolber'},
+{source: 'Lai Wing', target: 'Dagmar Nared'},
+{source: 'Lai Wing', target: 'anon_3'},
+{source: 'Lai Wing', target: 'Antonella Perini'},
+{source: 'Lai Wing', target: 'Jack Miller'},
+{source: 'Lai Wing', target: 'anon_1'},
+{source: 'Lai Wing', target: 'Maria-Diana Banias'},
+{source: 'Lai Wing', target: 'Yue Yang'},
+{source: 'Lai Wing', target: 'anon_0'},
+{source: 'Lai Wing', target: 'Maxine Setiawan'},
+{source: 'Lai Wing', target: 'Kassie Scott'},
+{source: 'anon_4', target: 'Yue Fang'},
+{source: 'anon_4', target: 'Lilla Gabrieli'},
+{source: 'anon_4', target: 'Clare Brennan'},
+{source: 'anon_4', target: 'Lai Wing'},
+{source: 'anon_4', target: 'anon_2'},
+{source: 'anon_4', target: 'Bernardo Russo'},
+{source: 'anon_4', target: 'anon_5'},
+{source: 'anon_4', target: 'Kristen McCollum'},
+{source: 'anon_4', target: 'Lizaveta Charnenka'},
+{source: 'anon_4', target: 'Yining Xu'},
+{source: 'anon_4', target: 'anon_6'},
+{source: 'anon_4', target: 'anon_7'},
+{source: 'anon_4', target: 'Alexandra Rottenkolber'},
+{source: 'anon_4', target: 'Dagmar Nared'},
+{source: 'anon_4', target: 'anon_3'},
+{source: 'anon_4', target: 'Antonella Perini'},
+{source: 'anon_4', target: 'Jack Miller'},
+{source: 'anon_4', target: 'anon_1'},
+{source: 'anon_4', target: 'Maria-Diana Banias'},
+{source: 'anon_4', target: 'Yue Yang'},
+{source: 'anon_4', target: 'anon_0'},
+{source: 'anon_4', target: 'Maxine Setiawan'},
+{source: 'anon_4', target: 'Kassie Scott'},
+{source: 'anon_2', target: 'Yue Fang'},
+{source: 'anon_2', target: 'Lilla Gabrieli'},
+{source: 'anon_2', target: 'Clare Brennan'},
+{source: 'anon_2', target: 'Lai Wing'},
+{source: 'anon_2', target: 'anon_4'},
+{source: 'anon_2', target: 'Bernardo Russo'},
+{source: 'anon_2', target: 'anon_5'},
+{source: 'anon_2', target: 'Kristen McCollum'},
+{source: 'anon_2', target: 'Lizaveta Charnenka'},
+{source: 'anon_2', target: 'Yining Xu'},
+{source: 'anon_2', target: 'anon_6'},
+{source: 'anon_2', target: 'anon_7'},
+{source: 'anon_2', target: 'Alexandra Rottenkolber'},
+{source: 'anon_2', target: 'Dagmar Nared'},
+{source: 'anon_2', target: 'anon_3'},
+{source: 'anon_2', target: 'Antonella Perini'},
+{source: 'anon_2', target: 'Jack Miller'},
+{source: 'anon_2', target: 'anon_1'},
+{source: 'anon_2', target: 'Maria-Diana Banias'},
+{source: 'anon_2', target: 'Yue Yang'},
+{source: 'anon_2', target: 'anon_0'},
+{source: 'anon_2', target: 'Maxine Setiawan'},
+{source: 'anon_2', target: 'Kassie Scott'},
+{source: 'Bernardo Russo', target: 'Yue Fang'},
+{source: 'Bernardo Russo', target: 'Lilla Gabrieli'},
+{source: 'Bernardo Russo', target: 'Clare Brennan'},
+{source: 'Bernardo Russo', target: 'Lai Wing'},
+{source: 'Bernardo Russo', target: 'anon_4'},
+{source: 'Bernardo Russo', target: 'anon_2'},
+{source: 'Bernardo Russo', target: 'anon_5'},
+{source: 'Bernardo Russo', target: 'Kristen McCollum'},
+{source: 'Bernardo Russo', target: 'Lizaveta Charnenka'},
+{source: 'Bernardo Russo', target: 'Yining Xu'},
+{source: 'Bernardo Russo', target: 'anon_6'},
+{source: 'Bernardo Russo', target: 'anon_7'},
+{source: 'Bernardo Russo', target: 'Alexandra Rottenkolber'},
+{source: 'Bernardo Russo', target: 'Dagmar Nared'},
+{source: 'Bernardo Russo', target: 'anon_3'},
+{source: 'Bernardo Russo', target: 'Antonella Perini'},
+{source: 'Bernardo Russo', target: 'Jack Miller'},
+{source: 'Bernardo Russo', target: 'anon_1'},
+{source: 'Bernardo Russo', target: 'Maria-Diana Banias'},
+{source: 'Bernardo Russo', target: 'Yue Yang'},
+{source: 'Bernardo Russo', target: 'anon_0'},
+{source: 'Bernardo Russo', target: 'Maxine Setiawan'},
+{source: 'Bernardo Russo', target: 'Kassie Scott'},
+{source: 'anon_5', target: 'Yue Fang'},
+{source: 'anon_5', target: 'Lilla Gabrieli'},
+{source: 'anon_5', target: 'Clare Brennan'},
+{source: 'anon_5', target: 'Lai Wing'},
+{source: 'anon_5', target: 'anon_4'},
+{source: 'anon_5', target: 'anon_2'},
+{source: 'anon_5', target: 'Bernardo Russo'},
+{source: 'anon_5', target: 'Kristen McCollum'},
+{source: 'anon_5', target: 'Lizaveta Charnenka'},
+{source: 'anon_5', target: 'Yining Xu'},
+{source: 'anon_5', target: 'anon_6'},
+{source: 'anon_5', target: 'anon_7'},
+{source: 'anon_5', target: 'Alexandra Rottenkolber'},
+{source: 'anon_5', target: 'Dagmar Nared'},
+{source: 'anon_5', target: 'anon_3'},
+{source: 'anon_5', target: 'Antonella Perini'},
+{source: 'anon_5', target: 'Jack Miller'},
+{source: 'anon_5', target: 'anon_1'},
+{source: 'anon_5', target: 'Maria-Diana Banias'},
+{source: 'anon_5', target: 'Yue Yang'},
+{source: 'anon_5', target: 'anon_0'},
+{source: 'anon_5', target: 'Maxine Setiawan'},
+{source: 'anon_5', target: 'Kassie Scott'},
+{source: 'Kristen McCollum', target: 'Yue Fang'},
+{source: 'Kristen McCollum', target: 'Lilla Gabrieli'},
+{source: 'Kristen McCollum', target: 'Clare Brennan'},
+{source: 'Kristen McCollum', target: 'Lai Wing'},
+{source: 'Kristen McCollum', target: 'anon_4'},
+{source: 'Kristen McCollum', target: 'anon_2'},
+{source: 'Kristen McCollum', target: 'Bernardo Russo'},
+{source: 'Kristen McCollum', target: 'anon_5'},
+{source: 'Kristen McCollum', target: 'Lizaveta Charnenka'},
+{source: 'Kristen McCollum', target: 'Yining Xu'},
+{source: 'Kristen McCollum', target: 'anon_6'},
+{source: 'Kristen McCollum', target: 'anon_7'},
+{source: 'Kristen McCollum', target: 'Alexandra Rottenkolber'},
+{source: 'Kristen McCollum', target: 'Dagmar Nared'},
+{source: 'Kristen McCollum', target: 'anon_3'},
+{source: 'Kristen McCollum', target: 'Antonella Perini'},
+{source: 'Kristen McCollum', target: 'Jack Miller'},
+{source: 'Kristen McCollum', target: 'anon_1'},
+{source: 'Kristen McCollum', target: 'Maria-Diana Banias'},
+{source: 'Kristen McCollum', target: 'Yue Yang'},
+{source: 'Kristen McCollum', target: 'anon_0'},
+{source: 'Kristen McCollum', target: 'Maxine Setiawan'},
+{source: 'Kristen McCollum', target: 'Kassie Scott'},
+{source: 'Lizaveta Charnenka', target: 'Yue Fang'},
+{source: 'Lizaveta Charnenka', target: 'Lilla Gabrieli'},
+{source: 'Lizaveta Charnenka', target: 'Clare Brennan'},
+{source: 'Lizaveta Charnenka', target: 'Lai Wing'},
+{source: 'Lizaveta Charnenka', target: 'anon_4'},
+{source: 'Lizaveta Charnenka', target: 'anon_2'},
+{source: 'Lizaveta Charnenka', target: 'Bernardo Russo'},
+{source: 'Lizaveta Charnenka', target: 'anon_5'},
+{source: 'Lizaveta Charnenka', target: 'Kristen McCollum'},
+{source: 'Lizaveta Charnenka', target: 'Yining Xu'},
+{source: 'Lizaveta Charnenka', target: 'anon_6'},
+{source: 'Lizaveta Charnenka', target: 'anon_7'},
+{source: 'Lizaveta Charnenka', target: 'Alexandra Rottenkolber'},
+{source: 'Lizaveta Charnenka', target: 'Dagmar Nared'},
+{source: 'Lizaveta Charnenka', target: 'anon_3'},
+{source: 'Lizaveta Charnenka', target: 'Antonella Perini'},
+{source: 'Lizaveta Charnenka', target: 'Jack Miller'},
+{source: 'Lizaveta Charnenka', target: 'anon_1'},
+{source: 'Lizaveta Charnenka', target: 'Maria-Diana Banias'},
+{source: 'Lizaveta Charnenka', target: 'Yue Yang'},
+{source: 'Lizaveta Charnenka', target: 'anon_0'},
+{source: 'Lizaveta Charnenka', target: 'Maxine Setiawan'},
+{source: 'Lizaveta Charnenka', target: 'Kassie Scott'},
+{source: 'Yining Xu', target: 'Yue Fang'},
+{source: 'Yining Xu', target: 'Lilla Gabrieli'},
+{source: 'Yining Xu', target: 'Clare Brennan'},
+{source: 'Yining Xu', target: 'Lai Wing'},
+{source: 'Yining Xu', target: 'anon_4'},
+{source: 'Yining Xu', target: 'anon_2'},
+{source: 'Yining Xu', target: 'Bernardo Russo'},
+{source: 'Yining Xu', target: 'anon_5'},
+{source: 'Yining Xu', target: 'Kristen McCollum'},
+{source: 'Yining Xu', target: 'Lizaveta Charnenka'},
+{source: 'Yining Xu', target: 'anon_6'},
+{source: 'Yining Xu', target: 'anon_7'},
+{source: 'Yining Xu', target: 'Alexandra Rottenkolber'},
+{source: 'Yining Xu', target: 'Dagmar Nared'},
+{source: 'Yining Xu', target: 'anon_3'},
+{source: 'Yining Xu', target: 'Antonella Perini'},
+{source: 'Yining Xu', target: 'Jack Miller'},
+{source: 'Yining Xu', target: 'anon_1'},
+{source: 'Yining Xu', target: 'Maria-Diana Banias'},
+{source: 'Yining Xu', target: 'Yue Yang'},
+{source: 'Yining Xu', target: 'anon_0'},
+{source: 'Yining Xu', target: 'Maxine Setiawan'},
+{source: 'Yining Xu', target: 'Kassie Scott'},
+{source: 'anon_6', target: 'Yue Fang'},
+{source: 'anon_6', target: 'Lilla Gabrieli'},
+{source: 'anon_6', target: 'Clare Brennan'},
+{source: 'anon_6', target: 'Lai Wing'},
+{source: 'anon_6', target: 'anon_4'},
+{source: 'anon_6', target: 'anon_2'},
+{source: 'anon_6', target: 'Bernardo Russo'},
+{source: 'anon_6', target: 'anon_5'},
+{source: 'anon_6', target: 'Kristen McCollum'},
+{source: 'anon_6', target: 'Lizaveta Charnenka'},
+{source: 'anon_6', target: 'Yining Xu'},
+{source: 'anon_6', target: 'anon_7'},
+{source: 'anon_6', target: 'Alexandra Rottenkolber'},
+{source: 'anon_6', target: 'Dagmar Nared'},
+{source: 'anon_6', target: 'anon_3'},
+{source: 'anon_6', target: 'Antonella Perini'},
+{source: 'anon_6', target: 'Jack Miller'},
+{source: 'anon_6', target: 'anon_1'},
+{source: 'anon_6', target: 'Maria-Diana Banias'},
+{source: 'anon_6', target: 'Yue Yang'},
+{source: 'anon_6', target: 'anon_0'},
+{source: 'anon_6', target: 'Maxine Setiawan'},
+{source: 'anon_6', target: 'Kassie Scott'},
+{source: 'anon_7', target: 'Yue Fang'},
+{source: 'anon_7', target: 'Lilla Gabrieli'},
+{source: 'anon_7', target: 'Clare Brennan'},
+{source: 'anon_7', target: 'Lai Wing'},
+{source: 'anon_7', target: 'anon_4'},
+{source: 'anon_7', target: 'anon_2'},
+{source: 'anon_7', target: 'Bernardo Russo'},
+{source: 'anon_7', target: 'anon_5'},
+{source: 'anon_7', target: 'Kristen McCollum'},
+{source: 'anon_7', target: 'Lizaveta Charnenka'},
+{source: 'anon_7', target: 'Yining Xu'},
+{source: 'anon_7', target: 'anon_6'},
+{source: 'anon_7', target: 'Alexandra Rottenkolber'},
+{source: 'anon_7', target: 'Dagmar Nared'},
+{source: 'anon_7', target: 'anon_3'},
+{source: 'anon_7', target: 'Antonella Perini'},
+{source: 'anon_7', target: 'Jack Miller'},
+{source: 'anon_7', target: 'anon_1'},
+{source: 'anon_7', target: 'Maria-Diana Banias'},
+{source: 'anon_7', target: 'Yue Yang'},
+{source: 'anon_7', target: 'anon_0'},
+{source: 'anon_7', target: 'Maxine Setiawan'},
+{source: 'anon_7', target: 'Kassie Scott'},
+{source: 'Alexandra Rottenkolber', target: 'Yue Fang'},
+{source: 'Alexandra Rottenkolber', target: 'Lilla Gabrieli'},
+{source: 'Alexandra Rottenkolber', target: 'Clare Brennan'},
+{source: 'Alexandra Rottenkolber', target: 'Lai Wing'},
+{source: 'Alexandra Rottenkolber', target: 'anon_4'},
+{source: 'Alexandra Rottenkolber', target: 'anon_2'},
+{source: 'Alexandra Rottenkolber', target: 'Bernardo Russo'},
+{source: 'Alexandra Rottenkolber', target: 'anon_5'},
+{source: 'Alexandra Rottenkolber', target: 'Kristen McCollum'},
+{source: 'Alexandra Rottenkolber', target: 'Lizaveta Charnenka'},
+{source: 'Alexandra Rottenkolber', target: 'Yining Xu'},
+{source: 'Alexandra Rottenkolber', target: 'anon_6'},
+{source: 'Alexandra Rottenkolber', target: 'anon_7'},
+{source: 'Alexandra Rottenkolber', target: 'Dagmar Nared'},
+{source: 'Alexandra Rottenkolber', target: 'anon_3'},
+{source: 'Alexandra Rottenkolber', target: 'Antonella Perini'},
+{source: 'Alexandra Rottenkolber', target: 'Jack Miller'},
+{source: 'Alexandra Rottenkolber', target: 'anon_1'},
+{source: 'Alexandra Rottenkolber', target: 'Maria-Diana Banias'},
+{source: 'Alexandra Rottenkolber', target: 'Yue Yang'},
+{source: 'Alexandra Rottenkolber', target: 'anon_0'},
+{source: 'Alexandra Rottenkolber', target: 'Maxine Setiawan'},
+{source: 'Alexandra Rottenkolber', target: 'Kassie Scott'},
+{source: 'Dagmar Nared', target: 'Yue Fang'},
+{source: 'Dagmar Nared', target: 'Lilla Gabrieli'},
+{source: 'Dagmar Nared', target: 'Clare Brennan'},
+{source: 'Dagmar Nared', target: 'Lai Wing'},
+{source: 'Dagmar Nared', target: 'anon_4'},
+{source: 'Dagmar Nared', target: 'anon_2'},
+{source: 'Dagmar Nared', target: 'Bernardo Russo'},
+{source: 'Dagmar Nared', target: 'anon_5'},
+{source: 'Dagmar Nared', target: 'Kristen McCollum'},
+{source: 'Dagmar Nared', target: 'Lizaveta Charnenka'},
+{source: 'Dagmar Nared', target: 'Yining Xu'},
+{source: 'Dagmar Nared', target: 'anon_6'},
+{source: 'Dagmar Nared', target: 'anon_7'},
+{source: 'Dagmar Nared', target: 'Alexandra Rottenkolber'},
+{source: 'Dagmar Nared', target: 'anon_3'},
+{source: 'Dagmar Nared', target: 'Antonella Perini'},
+{source: 'Dagmar Nared', target: 'Jack Miller'},
+{source: 'Dagmar Nared', target: 'anon_1'},
+{source: 'Dagmar Nared', target: 'Maria-Diana Banias'},
+{source: 'Dagmar Nared', target: 'Yue Yang'},
+{source: 'Dagmar Nared', target: 'anon_0'},
+{source: 'Dagmar Nared', target: 'Maxine Setiawan'},
+{source: 'Dagmar Nared', target: 'Kassie Scott'},
+{source: 'anon_3', target: 'Yue Fang'},
+{source: 'anon_3', target: 'Lilla Gabrieli'},
+{source: 'anon_3', target: 'Clare Brennan'},
+{source: 'anon_3', target: 'Lai Wing'},
+{source: 'anon_3', target: 'anon_4'},
+{source: 'anon_3', target: 'anon_2'},
+{source: 'anon_3', target: 'Bernardo Russo'},
+{source: 'anon_3', target: 'anon_5'},
+{source: 'anon_3', target: 'Kristen McCollum'},
+{source: 'anon_3', target: 'Lizaveta Charnenka'},
+{source: 'anon_3', target: 'Yining Xu'},
+{source: 'anon_3', target: 'anon_6'},
+{source: 'anon_3', target: 'anon_7'},
+{source: 'anon_3', target: 'Alexandra Rottenkolber'},
+{source: 'anon_3', target: 'Dagmar Nared'},
+{source: 'anon_3', target: 'Antonella Perini'},
+{source: 'anon_3', target: 'Jack Miller'},
+{source: 'anon_3', target: 'anon_1'},
+{source: 'anon_3', target: 'Maria-Diana Banias'},
+{source: 'anon_3', target: 'Yue Yang'},
+{source: 'anon_3', target: 'anon_0'},
+{source: 'anon_3', target: 'Maxine Setiawan'},
+{source: 'anon_3', target: 'Kassie Scott'},
+{source: 'Antonella Perini', target: 'Yue Fang'},
+{source: 'Antonella Perini', target: 'Lilla Gabrieli'},
+{source: 'Antonella Perini', target: 'Clare Brennan'},
+{source: 'Antonella Perini', target: 'Lai Wing'},
+{source: 'Antonella Perini', target: 'anon_4'},
+{source: 'Antonella Perini', target: 'anon_2'},
+{source: 'Antonella Perini', target: 'Bernardo Russo'},
+{source: 'Antonella Perini', target: 'anon_5'},
+{source: 'Antonella Perini', target: 'Kristen McCollum'},
+{source: 'Antonella Perini', target: 'Lizaveta Charnenka'},
+{source: 'Antonella Perini', target: 'Yining Xu'},
+{source: 'Antonella Perini', target: 'anon_6'},
+{source: 'Antonella Perini', target: 'anon_7'},
+{source: 'Antonella Perini', target: 'Alexandra Rottenkolber'},
+{source: 'Antonella Perini', target: 'Dagmar Nared'},
+{source: 'Antonella Perini', target: 'anon_3'},
+{source: 'Antonella Perini', target: 'Jack Miller'},
+{source: 'Antonella Perini', target: 'anon_1'},
+{source: 'Antonella Perini', target: 'Maria-Diana Banias'},
+{source: 'Antonella Perini', target: 'Yue Yang'},
+{source: 'Antonella Perini', target: 'anon_0'},
+{source: 'Antonella Perini', target: 'Maxine Setiawan'},
+{source: 'Antonella Perini', target: 'Kassie Scott'},
+{source: 'Jack Miller', target: 'Yue Fang'},
+{source: 'Jack Miller', target: 'Lilla Gabrieli'},
+{source: 'Jack Miller', target: 'Clare Brennan'},
+{source: 'Jack Miller', target: 'Lai Wing'},
+{source: 'Jack Miller', target: 'anon_4'},
+{source: 'Jack Miller', target: 'anon_2'},
+{source: 'Jack Miller', target: 'Bernardo Russo'},
+{source: 'Jack Miller', target: 'anon_5'},
+{source: 'Jack Miller', target: 'Kristen McCollum'},
+{source: 'Jack Miller', target: 'Lizaveta Charnenka'},
+{source: 'Jack Miller', target: 'Yining Xu'},
+{source: 'Jack Miller', target: 'anon_6'},
+{source: 'Jack Miller', target: 'anon_7'},
+{source: 'Jack Miller', target: 'Alexandra Rottenkolber'},
+{source: 'Jack Miller', target: 'Dagmar Nared'},
+{source: 'Jack Miller', target: 'anon_3'},
+{source: 'Jack Miller', target: 'Antonella Perini'},
+{source: 'Jack Miller', target: 'anon_1'},
+{source: 'Jack Miller', target: 'Maria-Diana Banias'},
+{source: 'Jack Miller', target: 'Yue Yang'},
+{source: 'Jack Miller', target: 'anon_0'},
+{source: 'Jack Miller', target: 'Maxine Setiawan'},
+{source: 'Jack Miller', target: 'Kassie Scott'},
+{source: 'anon_1', target: 'Yue Fang'},
+{source: 'anon_1', target: 'Lilla Gabrieli'},
+{source: 'anon_1', target: 'Clare Brennan'},
+{source: 'anon_1', target: 'Lai Wing'},
+{source: 'anon_1', target: 'anon_4'},
+{source: 'anon_1', target: 'anon_2'},
+{source: 'anon_1', target: 'Bernardo Russo'},
+{source: 'anon_1', target: 'anon_5'},
+{source: 'anon_1', target: 'Kristen McCollum'},
+{source: 'anon_1', target: 'Lizaveta Charnenka'},
+{source: 'anon_1', target: 'Yining Xu'},
+{source: 'anon_1', target: 'anon_6'},
+{source: 'anon_1', target: 'anon_7'},
+{source: 'anon_1', target: 'Alexandra Rottenkolber'},
+{source: 'anon_1', target: 'Dagmar Nared'},
+{source: 'anon_1', target: 'anon_3'},
+{source: 'anon_1', target: 'Antonella Perini'},
+{source: 'anon_1', target: 'Jack Miller'},
+{source: 'anon_1', target: 'Maria-Diana Banias'},
+{source: 'anon_1', target: 'Yue Yang'},
+{source: 'anon_1', target: 'anon_0'},
+{source: 'anon_1', target: 'Maxine Setiawan'},
+{source: 'anon_1', target: 'Kassie Scott'},
+{source: 'Maria-Diana Banias', target: 'Yue Fang'},
+{source: 'Maria-Diana Banias', target: 'Lilla Gabrieli'},
+{source: 'Maria-Diana Banias', target: 'Clare Brennan'},
+{source: 'Maria-Diana Banias', target: 'Lai Wing'},
+{source: 'Maria-Diana Banias', target: 'anon_4'},
+{source: 'Maria-Diana Banias', target: 'anon_2'},
+{source: 'Maria-Diana Banias', target: 'Bernardo Russo'},
+{source: 'Maria-Diana Banias', target: 'anon_5'},
+{source: 'Maria-Diana Banias', target: 'Kristen McCollum'},
+{source: 'Maria-Diana Banias', target: 'Lizaveta Charnenka'},
+{source: 'Maria-Diana Banias', target: 'Yining Xu'},
+{source: 'Maria-Diana Banias', target: 'anon_6'},
+{source: 'Maria-Diana Banias', target: 'anon_7'},
+{source: 'Maria-Diana Banias', target: 'Alexandra Rottenkolber'},
+{source: 'Maria-Diana Banias', target: 'Dagmar Nared'},
+{source: 'Maria-Diana Banias', target: 'anon_3'},
+{source: 'Maria-Diana Banias', target: 'Antonella Perini'},
+{source: 'Maria-Diana Banias', target: 'Jack Miller'},
+{source: 'Maria-Diana Banias', target: 'anon_1'},
+{source: 'Maria-Diana Banias', target: 'Yue Yang'},
+{source: 'Maria-Diana Banias', target: 'anon_0'},
+{source: 'Maria-Diana Banias', target: 'Maxine Setiawan'},
+{source: 'Maria-Diana Banias', target: 'Kassie Scott'},
+{source: 'Yue Yang', target: 'Yue Fang'},
+{source: 'Yue Yang', target: 'Lilla Gabrieli'},
+{source: 'Yue Yang', target: 'Clare Brennan'},
+{source: 'Yue Yang', target: 'Lai Wing'},
+{source: 'Yue Yang', target: 'anon_4'},
+{source: 'Yue Yang', target: 'anon_2'},
+{source: 'Yue Yang', target: 'Bernardo Russo'},
+{source: 'Yue Yang', target: 'anon_5'},
+{source: 'Yue Yang', target: 'Kristen McCollum'},
+{source: 'Yue Yang', target: 'Lizaveta Charnenka'},
+{source: 'Yue Yang', target: 'Yining Xu'},
+{source: 'Yue Yang', target: 'anon_6'},
+{source: 'Yue Yang', target: 'anon_7'},
+{source: 'Yue Yang', target: 'Alexandra Rottenkolber'},
+{source: 'Yue Yang', target: 'Dagmar Nared'},
+{source: 'Yue Yang', target: 'anon_3'},
+{source: 'Yue Yang', target: 'Antonella Perini'},
+{source: 'Yue Yang', target: 'Jack Miller'},
+{source: 'Yue Yang', target: 'anon_1'},
+{source: 'Yue Yang', target: 'Maria-Diana Banias'},
+{source: 'Yue Yang', target: 'anon_0'},
+{source: 'Yue Yang', target: 'Maxine Setiawan'},
+{source: 'Yue Yang', target: 'Kassie Scott'},
+{source: 'anon_0', target: 'Yue Fang'},
+{source: 'anon_0', target: 'Lilla Gabrieli'},
+{source: 'anon_0', target: 'Clare Brennan'},
+{source: 'anon_0', target: 'Lai Wing'},
+{source: 'anon_0', target: 'anon_4'},
+{source: 'anon_0', target: 'anon_2'},
+{source: 'anon_0', target: 'Bernardo Russo'},
+{source: 'anon_0', target: 'anon_5'},
+{source: 'anon_0', target: 'Kristen McCollum'},
+{source: 'anon_0', target: 'Lizaveta Charnenka'},
+{source: 'anon_0', target: 'Yining Xu'},
+{source: 'anon_0', target: 'anon_6'},
+{source: 'anon_0', target: 'anon_7'},
+{source: 'anon_0', target: 'Alexandra Rottenkolber'},
+{source: 'anon_0', target: 'Dagmar Nared'},
+{source: 'anon_0', target: 'anon_3'},
+{source: 'anon_0', target: 'Antonella Perini'},
+{source: 'anon_0', target: 'Jack Miller'},
+{source: 'anon_0', target: 'anon_1'},
+{source: 'anon_0', target: 'Maria-Diana Banias'},
+{source: 'anon_0', target: 'Yue Yang'},
+{source: 'anon_0', target: 'Maxine Setiawan'},
+{source: 'anon_0', target: 'Kassie Scott'},
+{source: 'Maxine Setiawan', target: 'Yue Fang'},
+{source: 'Maxine Setiawan', target: 'Lilla Gabrieli'},
+{source: 'Maxine Setiawan', target: 'Clare Brennan'},
+{source: 'Maxine Setiawan', target: 'Lai Wing'},
+{source: 'Maxine Setiawan', target: 'anon_4'},
+{source: 'Maxine Setiawan', target: 'anon_2'},
+{source: 'Maxine Setiawan', target: 'Bernardo Russo'},
+{source: 'Maxine Setiawan', target: 'anon_5'},
+{source: 'Maxine Setiawan', target: 'Kristen McCollum'},
+{source: 'Maxine Setiawan', target: 'Lizaveta Charnenka'},
+{source: 'Maxine Setiawan', target: 'Yining Xu'},
+{source: 'Maxine Setiawan', target: 'anon_6'},
+{source: 'Maxine Setiawan', target: 'anon_7'},
+{source: 'Maxine Setiawan', target: 'Alexandra Rottenkolber'},
+{source: 'Maxine Setiawan', target: 'Dagmar Nared'},
+{source: 'Maxine Setiawan', target: 'anon_3'},
+{source: 'Maxine Setiawan', target: 'Antonella Perini'},
+{source: 'Maxine Setiawan', target: 'Jack Miller'},
+{source: 'Maxine Setiawan', target: 'anon_1'},
+{source: 'Maxine Setiawan', target: 'Maria-Diana Banias'},
+{source: 'Maxine Setiawan', target: 'Yue Yang'},
+{source: 'Maxine Setiawan', target: 'anon_0'},
+{source: 'Maxine Setiawan', target: 'Kassie Scott'},
+{source: 'Kassie Scott', target: 'Yue Fang'},
+{source: 'Kassie Scott', target: 'Lilla Gabrieli'},
+{source: 'Kassie Scott', target: 'Clare Brennan'},
+{source: 'Kassie Scott', target: 'Lai Wing'},
+{source: 'Kassie Scott', target: 'anon_4'},
+{source: 'Kassie Scott', target: 'anon_2'},
+{source: 'Kassie Scott', target: 'Bernardo Russo'},
+{source: 'Kassie Scott', target: 'anon_5'},
+{source: 'Kassie Scott', target: 'Kristen McCollum'},
+{source: 'Kassie Scott', target: 'Lizaveta Charnenka'},
+{source: 'Kassie Scott', target: 'Yining Xu'},
+{source: 'Kassie Scott', target: 'anon_6'},
+{source: 'Kassie Scott', target: 'anon_7'},
+{source: 'Kassie Scott', target: 'Alexandra Rottenkolber'},
+{source: 'Kassie Scott', target: 'Dagmar Nared'},
+{source: 'Kassie Scott', target: 'anon_3'},
+{source: 'Kassie Scott', target: 'Antonella Perini'},
+{source: 'Kassie Scott', target: 'Jack Miller'},
+{source: 'Kassie Scott', target: 'anon_1'},
+{source: 'Kassie Scott', target: 'Maria-Diana Banias'},
+{source: 'Kassie Scott', target: 'Yue Yang'},
+{source: 'Kassie Scott', target: 'anon_0'},
+{source: 'Kassie Scott', target: 'Maxine Setiawan'},
+];
+  
+var nodes = [ 
+    {id: 'Yue Fang', name: 'Yue Fang', x:-42.005823722097546, y:6.635606886127412},
+{id: 'Lilla Gabrieli', name: 'Lilla Gabrieli', x:-20.423186925424602, y:-13.397234509908557},
+{id: 'Clare Brennan', name: 'Clare Brennan', x:7.910508886531388, y:14.54051933572795},
+{id: 'Lai Wing', name: 'Lai Wing', x:-88.68573285108819, y:-63.433845458528694},
+{id: 'anon_4', name: 'anon_4', x:20.399768196086143, y:63.04654821276697},
+{id: 'anon_2', name: 'anon_2', x:21.74995014455322, y:-1.0527630275589122},
+{id: 'Bernardo Russo', name: 'Bernardo Russo', x:53.78498904000525, y:-43.59301497166205},
+{id: 'anon_5', name: 'anon_5', x:44.612882103473396, y:-3.015200256457954},
+{id: 'Kristen McCollum', name: 'Kristen McCollum', x:59.521729493326035, y:22.098971992071732},
+{id: 'Lizaveta Charnenka', name: 'Lizaveta Charnenka', x:-4.343810746703301, y:-51.47507068587056},
+{id: 'Yining Xu', name: 'Yining Xu', x:26.43793054651324, y:-69.0958421712624},
+{id: 'anon_6', name: 'anon_6', x:-41.84975509762024, y:38.962360777555276},
+{id: 'anon_7', name: 'anon_7', x:-32.2155423478975, y:62.12492806559556},
+{id: 'Alexandra Rottenkolber', name: 'Alexandra Rottenkolber', x:-8.157115699941274, y:36.728978576597214},
+{id: 'Dagmar Nared', name: 'Dagmar Nared', x:53.68850807639198, y:86.3247303398997},
+{id: 'anon_3', name: 'anon_3', x:-17.802039604273286, y:10.277734728878276},
+{id: 'Antonella Perini', name: 'Antonella Perini', x:-49.67520672099835, y:-27.94641030668737},
+{id: 'Jack Miller', name: 'Jack Miller', x:75.42440775242532, y:-24.331757045732257},
+{id: 'anon_1', name: 'anon_1', x:-13.979371846802469, y:-33.72067609192079},
+{id: 'Maria-Diana Banias', name: 'Maria-Diana Banias', x:2.4730731531492185, y:50.243826906145806},
+{id: 'Yue Yang', name: 'Yue Yang', x:-27.779305796282145, y:-100.0},
+{id: 'anon_0', name: 'anon_0', x:36.946540210648365, y:35.91869011376767},
+{id: 'Maxine Setiawan', name: 'Maxine Setiawan', x:-66.99858853065733, y:25.13631353037417},
+{id: 'Kassie Scott', name: 'Kassie Scott', x:10.965192286682232, y:-20.977394939918142},
+];
+
+//CONNECTIONS
+var hash_lookup = [];
+nodes.forEach(function(d, i) {
+  hash_lookup[d.id] = d;
+});
+links.forEach(function(d, i) {
+  d.source = hash_lookup[d.source];
+  d.target = hash_lookup[d.target];
+});
+
+//FORCE LAYOUT
+var force = d3.layout.force()
+    .size([width, height])
+    .nodes(d3.values(nodes))
+    .links(links)
+    .on('tick', tick)
+    .linkDistance(100)
+    .gravity(.15)
+    .friction(.8)
+    .linkStrength(1)
+    .charge(-425)
+    .chargeDistance(600)
+    .start();
+
+//LINKS
+/* var link = svg.selectAll('.link')
+    .data(links)
+    .enter().append('line')
+    .attr('class', 'link'); */
+var link = svg.selectAll(".link")
+			.data(links)
+			.enter().append("line")
+			.attr("class", "link")
+			.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
+
+//NODES
+var node = svg.selectAll('.node')
+    .data(force.nodes())
+    .enter().append('circle')
+    .attr('class', 'node')
+    .attr('r', width * 0.01)
+
+//LABELS
+var text_center = false;
+var nominal_text_size = 8;
+var max_text_size = 10;
+var nominal_base_node_size = 4;
+var max_base_node_size = 6;    
+var size = d3.scale.pow().exponent(1)
+  .domain([1,100])
+  .range([8,24]);
+    
+var text = svg.selectAll(".text")
+    .data(nodes)
+    .enter().append("text")
+    .attr("dy", ".35em")
+	.style("font-size", nominal_text_size + "px")
+
+	if (text_center)
+	 text.text(function(d) { return d.name; })
+	.style("text-anchor", "middle");
+    
+	else 
+	text.attr("dx", function(d) {return (size(d.size)|| nominal_base_node_size);})
+    .text(function(d) { return '\u2002'+d.name; });
+
+//ZOOM AND PAN
+function redraw() {
+    svg.attr("transform",
+        "translate(" + d3.event.translate + ")"
+        + " scale(" + d3.event.scale + ")");
+    }
+    
+var drag = force.drag()
+      .on("dragstart", function(d) {
+		d3.event.sourceEvent.stopPropagation();
+      });
+
+//NODES IN SPACE
+function tick(e) {
+
+    text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    
+    node.attr('cx', function(d) { return d.x; })
+        .attr('cy', function(d) { return d.y; })
+        .call(force.drag);
+
+    link.attr('x1', function(d) { return d.source.x; })
+        .attr('y1', function(d) { return d.source.y; })
+        .attr('x2', function(d) { return d.target.x; })
+        .attr('y2', function(d) { return d.target.y; });
+
+};
+
+//AUTOCOMPLETE SEARCH
+var optArray = [];
+for (var i = 0; i < nodes.length - 1; i++) {
+    optArray.push(nodes[i].name);
+}
+optArray = optArray.sort();
+
+$(function () {
+    $("#search").autocomplete({
+        source: optArray
+    });
+});
+
+function searchNode() {
+    var selectedVal = document.getElementById('search').value;
+    if (selectedVal == 'none') {}
+    else {
+        var selected = node.filter(function (d, i) {
+            return d.name != selectedVal;
+        });
+         var selectedText = text.filter(function (d, i) {
+            return d.name != selectedVal;
+        });
+        selected.style("opacity", "0");
+        selectedText.style("opacity", "0");
+        var link = svg.selectAll(".link")
+            link.style("opacity", "0");
+        d3.selectAll(".node, .link, .text").transition()
+            .duration(3000)
+            .style("opacity", '1');
+    }
+}
+</script>
+</body>
+</html>
