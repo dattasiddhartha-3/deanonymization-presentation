@@ -20,8 +20,8 @@
 
 
 <script>
-var width = 900,
-    height = 590;
+var width = window.innerWidth,
+    height = Math.min(500, window.innerHeight);
     
 var svg = d3.select("body")
         .append("svg")
