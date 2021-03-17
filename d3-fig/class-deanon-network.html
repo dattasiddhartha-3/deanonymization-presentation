@@ -5,6 +5,7 @@
 .node {
     stroke: #aaa;
     stroke-width: 2px;
+    fill: white;
 }
 
 .link {
@@ -673,6 +674,7 @@ var text = svg.selectAll(".text")
     .enter().append("text")
     .attr("dy", ".35em")
 	.style("font-size", nominal_text_size + "px")
+	.style('fill', 'white')
 
 	if (text_center)
 	 text.text(function(d) { return d.name; })
