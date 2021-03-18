@@ -30,7 +30,7 @@
             <p class="small">What do we wish to achieve from network anonymization? Why do networks need to be anonymous? What are our constraints?</p>
             <ul>
                 <li class="small">Share the network data (e.g. for academic or industrial collaboration)</li>
-                <li class="small">Domain may be sensitive (e.g. communication data, social networks, mobility trace networks, peer-to-peer networks)</li>
+                <li class="small">Domain may be sensitive (e.g. communication data, social networks, mobility trace networks, peer-to-peer networks, epidemiological/healthcare networks)</li>
                 <li class="small">Things we may wish to hide: node privacy, edge privacy, </li>
                 <li class="small">Preserve graph properties (e.g. Degree, Path Length, Local & Global Clustering Coefficients, Betweenness Centrality)</li>
                 <li class="small">Inhibit de-anonymization</li>
@@ -51,17 +51,45 @@
       </div>
   </div>
 </section>
-  
+    
 <section>
-    <h3>Anonymization Techniques</h3>
+    <h3>De-anonymization</h3>
     <div class="row no-margin-top">
         <div class="col-50 no-margin-top left">
             <ul>
-                <li class="small">Naive ID Removal</li>
-                <li class="small">Edge Editing based Anonymization</li>
-                <li class="small">k-anonymity</li>
-                <li class="small">Aggregation/Class/Cluster based Anonymization</li>
-                <li class="small">Random Walk based Anonymization</li>
+                <li class="small">Incentives: learn sensitive patterns amongst node attributes, learn sensitive attributes about nodes</li>
+                <li class="small">Attacks that help applications: mass surveilance, abusive marketing, phishing</li>
+            </ul>
+        </div>
+    </div>
+</section>
+  
+<section>
+    <h3>Methods</h3>
+    <div class="row no-margin-top">
+        <div class="col-50 no-margin-top left">
+            <p>Anonymization Techniques:</p>
+            <ul>
+                <li class="small">Naive ID Removal: replacing node label with randomly-mapped node label</li>
+                <li class="small">Edge Editing based Anonymization: <i>AddDel</i> (k randomly chosen edges will be added to G followed by another k randomly chosen edges will be deleted from G), <i>Switch</i> (k edge switches are conducted, where edges between nodes will be removed and re-routed to another set of nodes)</li>
+                <li class="small">k-anonymity: remove node attributes based on metric, e.g. k-Neighborhood Anonymity, k-Degree Anonymity</li>
+                <li class="small">Aggregation/Class/Cluster based Anonymization: anonymize users into clusters; anonymized graph should consist of supernodes (each corresponding to nodes in a cluster/subgraph), and superedges (edge densities among supernodes)</li>
+                <li class="small">Random Walk based Anonymization: an edge between two users i and j is replaced by another edge between i and u, where u is the destination of a random walk starting from j</li>
+            </ul>
+            <p>De-anonymization Techniques:</p>
+            <ul>
+                <li class="small">Seed-based De-anonymization: identify some users as seeds first (e.g. infiltrate a social network and identify your seed node subgraph); active (e.g. create extensive fake accounts around network), passive (e.g. existing personal account)</li>
+                <li class="small">Seed-free De-anonymization: use probablistic reasoning (e.g. minimizing edge difference between anonymized graph and auxiliary graph with simulated node labelleing and simulated edge creation/removal)</li>
+                <li class="small">Seed-based/Active De-anonymization: </li>
+                <li class="small">Seed-free/Passive De-anonymization: </li>
+            </ul>
+            <p>De-anonymization attack components:</p>
+            <ul>
+                <li class="small">Seed: an attacker's unique insertion that can help them reverse whatever anonymizes their seed</li>
+                <li class="small">Active/Passive: whether the attacker needs to make widespread modifications to their network they wish to compromise</li>
+                <li class="small">Auxiliary graph: any pre-existing data that can be used in conjunction with the anonymized graph to match patterns / identify nodes, etc</li>
+                <li class="small">Domain knowledge: if the attacker can estimate the scheme used to anonymize the dataset (e.g. based on community), then they can reformulate their de-anonymization strategy</li>
+                <li class="small"></li>
             </ul>
         </div>
     </div>
@@ -82,39 +110,26 @@
 <section class="fig-container"
          data-file="https://dattasiddhartha-3.github.io/deanonymization-presentation/networkx/anonymize.html">
     <div style="width: 50%; margin-left: 45% !important; background-color: #777777; font-size: 0.65em; border-radius: 20px;">
-         <p class="small">k-anonymity anonymization</p>
+         <p class="small">k-attribute anonmization</p>
     </div>
 </section>
-    
-    
-<section>
-    <h3>De-anonymization</h3>
-    <div class="row no-margin-top">
-        <div class="col-50 no-margin-top left">
-            <ul>
-                <li class="small">Incentives: learn sensitive patterns amongst node attributes, learn sensitive attributes about nodes</li>
-                <li class="small">Attacks that help applications: mass surveilance, abusive marketing, phishing</li>
-            </ul>
-        </div>
-    </div>
-</section>
+        
     
 <section class="fig-container"
          data-file="https://dattasiddhartha-3.github.io/deanonymization-presentation/networkx/eval_deanonymize.html">
-    <div style="width: 50%; margin-left: 45% !important; background-color: #777777; font-size: 0.65em; border-radius: 20px;">
-         <p class="small">De-anonymization Techniques</p>
-            <ul>
-                <li class="small">Seed-based/Active De-anonymization</li>
-                <li class="small">Seed-free/Passive De-anonymization</li>
-            </ul>
-    </div>
 </section>
-    
+     
 <section>
     <h3>Evaluation & Reflection</h3>
     <div class="row no-margin-top">
         <div class="col-50 no-margin-top left">
             <p class="small">Should we be concerned? Is the method flawed? What would put our privacy at greater risk? What can we do to "defend" ourselves?</p>
+            <ul>
+                <li class="small">Structure-based de-anonymization / known node list from other external sources (which the defender cannot control for) nullifies many methods that still retain graph structure</li>
+                <li class="small">Perturbing the graph changes its structure, and may nullify the purpose of graph sharing in the first place (e.g. if too many edges removed and random ones created, then clustering coefficients may change drastically)</li>
+                <li class="small">De-anonymization is not a fully-automatic process; it requires understanding the context, accumulating resources, identifying vulnerabilities</li>
+                <li class="small">The use of seeds in de-anonymization is more reliable, but not all situations may support seeds.</li>
+            </ul>
         </div>
         <div class="col-50 no-margin-top">
         <div class="fig-container no-margin-top" data-file="d3-fig/class-deanon-network.html"></div>
@@ -122,7 +137,7 @@
 </section>
     
 <section>
-    <h3>More papers to read:</h3>
+    <h5>More papers to read:</h5>
     <div class="row no-margin-top">
         <div class="col-50 no-margin-top left">
             <ul>
