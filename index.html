@@ -63,11 +63,11 @@
         </div>
     </div>
 </section>
-  
+    
 <section>
     <h3>Methods</h3>
     <div class="row no-margin-top">
-        <div class="col-50 no-margin-top" style="font-size: 5px;">
+        <div class="col-50 no-margin-top left">
             <p>Anonymization Techniques:</p>
             <ul>
                 <li class="small">Naive ID Removal: replacing node label with randomly-mapped node label</li>
@@ -76,20 +76,33 @@
                 <li class="small">Aggregation/Class/Cluster based Anonymization: anonymize users into clusters; anonymized graph should consist of supernodes (each corresponding to nodes in a cluster/subgraph), and superedges (edge densities among supernodes)</li>
                 <li class="small">Random Walk based Anonymization: an edge between two users i and j is replaced by another edge between i and u, where u is the destination of a random walk starting from j</li>
             </ul>
+        </div>
+    </div>
+</section>
+    
+<section>
+    <h3>Methods</h3>
+    <div class="row no-margin-top">
+        <div class="col-50 no-margin-top left">
             <p>De-anonymization Techniques:</p>
             <ul>
                 <li class="small">Seed-based De-anonymization: identify some users as seeds first (e.g. infiltrate a social network and identify your seed node subgraph); active (e.g. create extensive fake accounts around network), passive (e.g. existing personal account)</li>
                 <li class="small">Seed-free De-anonymization: use probablistic reasoning (e.g. minimizing edge difference between anonymized graph and auxiliary graph with simulated node labelleing and simulated edge creation/removal)</li>
-                <li class="small">Seed-based/Active De-anonymization: </li>
-                <li class="small">Seed-free/Passive De-anonymization: </li>
             </ul>
+        </div>
+    </div>
+</section>
+    
+<section>
+    <h3>Methods</h3>
+    <div class="row no-margin-top">
+        <div class="col-50 no-margin-top left">
             <p>De-anonymization attack components:</p>
             <ul>
                 <li class="small">Seed: an attacker's unique insertion that can help them reverse whatever anonymizes their seed</li>
                 <li class="small">Active/Passive: whether the attacker needs to make widespread modifications to their network they wish to compromise</li>
                 <li class="small">Auxiliary graph: any pre-existing data that can be used in conjunction with the anonymized graph to match patterns / identify nodes, etc</li>
                 <li class="small">Domain knowledge: if the attacker can estimate the scheme used to anonymize the dataset (e.g. based on community), then they can reformulate their de-anonymization strategy</li>
-                <li class="small"></li>
             </ul>
         </div>
     </div>
@@ -120,7 +133,7 @@
 </section>
      
 <section>
-    <h3>Evaluation & Reflection</h3>
+    <h5>Evaluation & Reflection</h5>
     <div class="row no-margin-top">
         <div class="col-50 no-margin-top left">
             <p class="small">Should we be concerned? Is the method flawed? What would put our privacy at greater risk? What can we do to "defend" ourselves?</p>
